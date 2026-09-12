@@ -59,9 +59,28 @@ Item {
     root.applying = true
     applyProc.pct = pct
     applyProc.command = ["pkexec", "sh", "-c",
-      "set -e; printf '%s\\n' \"$1\" > \"$2/charge_control_end_threshold\"; " +
+      "set -e; " +
+      "if [ -f \"$2/charge_control_start_threshold\" ]; then " +
+      "  s=$(($1 - 5)); [ \"$s\" -lt 0 ] && s=0; " +
+      "  if [ \"$1\" -lt 100 ]; then " +
+      "    printf '%s\\n' \"$s\" > \"$2/charge_control_start_threshold\" 2>/dev/null || true; " +
+      "    printf '%s\\n' \"$1\" > \"$2/charge_control_end_threshold\"; " +
+      "  else " +
+      "    printf '%s\\n' \"$1\" > \"$2/charge_control_end_threshold\"; " +
+      "    printf '%s\\n' \"95\" > \"$2/charge_control_start_threshold\" 2>/dev/null || true; " +
+      "  fi; " +
+      "else " +
+      "  printf '%s\\n' \"$1\" > \"$2/charge_control_end_threshold\"; " +
+      "fi; " +
       "if [ \"$1\" -eq 100 ]; then rm -f \"$3\"; " +
-      "else printf 'w %s/charge_control_end_threshold - - - - %s\\n' \"$2\" \"$1\" > \"$3\"; fi",
+      "else " +
+      "  { if [ -f \"$2/charge_control_start_threshold\" ]; then " +
+      "      s=$(($1 - 5)); [ \"$s\" -lt 0 ] && s=0; " +
+      "      printf 'w %s/charge_control_start_threshold - - - - %s\\n' \"$2\" \"$s\"; " +
+      "    fi; " +
+      "    printf 'w %s/charge_control_end_threshold - - - - %s\\n' \"$2\" \"$1\"; " +
+      "  } > \"$3\"; " +
+      "fi",
       "sh", String(pct), root.batteryPath, root.tmpfilesPath]
     applyProc.running = true
   }

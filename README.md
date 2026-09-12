@@ -91,9 +91,11 @@ Vendors vary. ASUS/LG/Samsung/Huawei expose an end threshold (this plugin's
 target); some laptops expose nothing. The plugin detects support at start:
 without a threshold control it stays read-only and still shows health
 stats, which nearly every battery reports (via `energy_full*` or
-`charge_full*`). ThinkPad start thresholds and TLP coexistence are out of
-scope for v1 — if you run TLP with `STOP_CHARGE_THRESH_BAT0` set, prefer
-TLP and leave this plugin read-only.
+`charge_full*`). 
+
+*Note: For laptops that expose a `charge_control_start_threshold` (like Clevo/COSMX or some ThinkPads), the kernel strictly enforces that the end threshold must be greater than or equal to the start threshold. The plugin automatically manages the start threshold in the background (keeping it 5% below the end limit) to prevent `EINVAL` rejections when you lower the charge limit.*
+
+TLP coexistence is out of scope for v1 — if you run TLP with `STOP_CHARGE_THRESH_BAT0` set, prefer TLP and leave this plugin read-only.
 
 ## Remove
 
