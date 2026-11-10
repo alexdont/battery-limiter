@@ -2,8 +2,9 @@ import QtQuick
 import qs.Commons
 import qs.Ui
 
-// Battery icon plus the active limit when one is set (quiet at stock 100).
-// Click opens the overlay with controls and health stats.
+// Battery icon (or a bolt, per the "icon" setting) plus the active limit when
+// one is set (quiet at stock 100). Click opens the overlay with controls and
+// health stats.
 BarWidget {
   id: root
   moduleName: "io.github.alexdont.battery-limiter"
@@ -28,6 +29,9 @@ BarWidget {
     onTriggered: root.resolveSvc()
   }
 
+  // A bolt keeps the widget apart from the stock battery indicator next to it.
+  readonly property string glyph: root.setting("icon", "battery") === "bolt" ? "󱐋" : "󰁹"
+
   implicitWidth: button.implicitWidth
   implicitHeight: button.implicitHeight
 
@@ -38,7 +42,7 @@ BarWidget {
     // setting() reads the per-widget shell.json entry (schema toggle in the
     // manifest); a stock 100% limit stays icon-only regardless.
     text: root.setting("showLimit", true) && root.svc && root.svc.supported && root.svc.limit < 100
-      ? "󰁹 " + root.svc.limit : "󰁹"
+      ? root.glyph + " " + root.svc.limit : root.glyph
     horizontalMargin: 7.5
     onPressed: function(b) {
       var s = root.resolveSvc()

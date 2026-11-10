@@ -37,6 +37,15 @@ omarchy bar set io.github.alexdont.battery-limiter showLimit false --json
 in the widget's manifest schema, so it will also appear in the shell's
 widget-settings UI as that lands.)
 
+Sitting next to Omarchy's own battery indicator, two battery outlines can
+look alike. Switch the icon to a lightning bolt (󱐋) with:
+
+```bash
+omarchy bar set io.github.alexdont.battery-limiter icon bolt
+```
+
+(`battery` is the default.)
+
 **The card** — current charge and state, the limit presets
 (**60% longevity · 80% balanced · 100% travel**, also on keys `6`/`8`/`0`),
 a 50–100% slider for custom values (drag, then confirm with **Apply** — a
