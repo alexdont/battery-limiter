@@ -29,6 +29,14 @@
         "label": "Show limit next to the icon",
         "description": "Display the active charge limit (e.g. 80) beside the battery icon. Off shows just the icon; the limit is always visible in the card.",
         "defaultValue": true
+      },
+      {
+        "key": "icon",
+        "type": "enum",
+        "label": "Bar icon",
+        "description": "Battery draws a battery outline. Bolt draws a lightning bolt, which tells the widget apart from Omarchy's own battery indicator when both sit in the bar.",
+        "options": ["battery", "bolt"],
+        "defaultValue": "battery"
       }
     ]
   }
